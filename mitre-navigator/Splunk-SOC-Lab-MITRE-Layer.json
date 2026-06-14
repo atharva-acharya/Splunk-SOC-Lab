@@ -1,0 +1,249 @@
+{
+  "name": "Splunk SOC Lab — MITRE ATT&CK Coverage",
+  "versions": {
+    "attack": "19",
+    "navigator": "4.9.1",
+    "layer": "4.5"
+  },
+  "domain": "enterprise-attack",
+  "description": "MITRE ATT&CK techniques detected and investigated in the Splunk SIEM Investigation Lab using BOTS v3 dataset. Each technique corresponds to a SPL detection rule and investigation report.",
+  "filters": {
+    "platforms": [
+      "Windows",
+      "Linux",
+      "IaaS"
+    ]
+  },
+  "sorting": 0,
+  "layout": {
+    "layout": "side",
+    "aggregateFunction": "average",
+    "showID": true,
+    "showName": true,
+    "showAggregateScores": false,
+    "countUnscored": false,
+    "expandedSubtechniques": "annotated"
+  },
+  "hideDisabled": false,
+  "techniques": [
+    {
+      "techniqueID": "T1595",
+      "tactic": "reconnaissance",
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": [],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1595.002",
+      "tactic": "reconnaissance",
+      "color": "#f4b942",
+      "comment": "Detected via SPL Rule 01. Multiple source IPs conducted automated HTTP scanning across 1000+ unique URI paths. Primary scanner 192.168.3.130 generated 2207 requests across 1023 unique paths. Documented in IR-001.",
+      "enabled": true,
+      "metadata": [
+        {"name": "Rule", "value": "SPL-Rule-01-Web-Recon"},
+        {"name": "Report", "value": "IR-001"},
+        {"name": "Sourcetype", "value": "stream:http"}
+      ],
+      "links": [],
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1190",
+      "tactic": "initial-access",
+      "color": "#e8433a",
+      "comment": "Detected via SPL Rule 02. CVE-2017-9805 Apache Struts REST plugin OGNL injection exploited by 192.168.8.103 against 192.168.9.30. Full RCE achieved. Backdoor account created, kernel exploit deployed, reverse shell to 45.77.53.176:8088. Documented in IR-002.",
+      "enabled": true,
+      "metadata": [
+        {"name": "Rule", "value": "SPL-Rule-02-Struts-RCE"},
+        {"name": "Report", "value": "IR-002"},
+        {"name": "CVE", "value": "CVE-2017-9805"},
+        {"name": "Sourcetype", "value": "stream:http"}
+      ],
+      "links": [],
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1048",
+      "tactic": "exfiltration",
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": [],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1048.003",
+      "tactic": "exfiltration",
+      "color": "#9b59b6",
+      "comment": "Detected via SPL Rule 03. Multiple internal hosts including BSTOLL-L generating DNS queries with randomly generated subdomain strings against froth.ly. Pattern consistent with data encoded into DNS labels for exfiltration. Documented in IR-003.",
+      "enabled": true,
+      "metadata": [
+        {"name": "Rule", "value": "SPL-Rule-03-DNS-Exfiltration"},
+        {"name": "Report", "value": "IR-003"},
+        {"name": "Sourcetype", "value": "stream:dns"}
+      ],
+      "links": [],
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1059",
+      "tactic": "execution",
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": [],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1059.003",
+      "tactic": "execution",
+      "color": "#e67e22",
+      "comment": "Detected via SPL Rule 04. Elevated execution of cmd.exe (1091), WMIC.exe (536), and reg.exe (523) across multiple Windows hosts. Co-execution of multiple LOLBins within 5-minute windows detected. Documented in IR-004.",
+      "enabled": true,
+      "metadata": [
+        {"name": "Rule", "value": "SPL-Rule-04-Suspicious-Process"},
+        {"name": "Report", "value": "IR-004"},
+        {"name": "Sourcetype", "value": "wineventlog:security (EventCode 4688)"}
+      ],
+      "links": [],
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1047",
+      "tactic": "execution",
+      "color": "#e67e22",
+      "comment": "WMIC.exe execution observed across multiple hosts. 536 total executions detected. Associated with LOLBin co-execution pattern. Documented in IR-004.",
+      "enabled": true,
+      "metadata": [
+        {"name": "Report", "value": "IR-004"},
+        {"name": "Sourcetype", "value": "wineventlog:security (EventCode 4688)"}
+      ],
+      "links": [],
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1136",
+      "tactic": "persistence",
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": [],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1136.001",
+      "tactic": "persistence",
+      "color": "#e8433a",
+      "comment": "Backdoor local account tomcat7 created with UID 0 (root) via useradd command injected through Struts RCE exploit. Documented in IR-002.",
+      "enabled": true,
+      "metadata": [
+        {"name": "Report", "value": "IR-002"},
+        {"name": "Detail", "value": "useradd -ou 0 -g 0 tomcat7"}
+      ],
+      "links": [],
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1112",
+      "tactic": "defense-evasion",
+      "color": "#e67e22",
+      "comment": "reg.exe execution observed 523 times across multiple hosts. Associated with LOLBin co-execution pattern indicative of persistence or defence evasion activity. Documented in IR-004.",
+      "enabled": true,
+      "metadata": [
+        {"name": "Report", "value": "IR-004"},
+        {"name": "Sourcetype", "value": "wineventlog:security (EventCode 4688)"}
+      ],
+      "links": [],
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1552",
+      "tactic": "credential-access",
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": [],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1552.005",
+      "tactic": "credential-access",
+      "color": "#e8433a",
+      "comment": "Detected via SPL Rule 05. 172.31.12.76 made 32 successful requests to /latest/meta-data/iam/security-credentials/EC2InstanceRole. IMDSv1 in use — unauthenticated. Credentials confirmed retrieved. Documented in IR-005.",
+      "enabled": true,
+      "metadata": [
+        {"name": "Rule", "value": "SPL-Rule-05-AWS-IMDS-Abuse"},
+        {"name": "Report", "value": "IR-005"},
+        {"name": "Sourcetype", "value": "stream:http"}
+      ],
+      "links": [],
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1105",
+      "tactic": "command-and-control",
+      "color": "#e8433a",
+      "comment": "Base64-encoded Linux kernel privilege escalation exploit (colonel.c) transferred to target via HTTP POST body and written to /tmp/colonel. Decoded and compiled on target. Documented in IR-002.",
+      "enabled": true,
+      "metadata": [
+        {"name": "Report", "value": "IR-002"},
+        {"name": "Detail", "value": "Kernel exploit dropped to /tmp/colonel via base64 echo"}
+      ],
+      "links": [],
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1071",
+      "tactic": "command-and-control",
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": [],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1071.001",
+      "tactic": "command-and-control",
+      "color": "#e8433a",
+      "comment": "Reverse shell established from compromised host to 45.77.53.176:8088 via netcat named pipe (/tmp/backpipe). Shell re-established 20 minutes after initial connection confirming active C2 operator. Documented in IR-002.",
+      "enabled": true,
+      "metadata": [
+        {"name": "Report", "value": "IR-002"},
+        {"name": "C2 IP", "value": "45.77.53.176:8088"}
+      ],
+      "links": [],
+      "showSubtechniques": false
+    }
+  ],
+  "gradient": {
+    "colors": ["#ff6666ff", "#ffe766ff", "#8ec843ff"],
+    "minValue": 0,
+    "maxValue": 100
+  },
+  "legendItems": [
+    {"label": "Critical — Active exploitation confirmed", "color": "#e8433a"},
+    {"label": "High — Exfiltration detected", "color": "#9b59b6"},
+    {"label": "Medium — Suspicious activity detected", "color": "#e67e22"},
+    {"label": "Reconnaissance — Pre-exploitation scanning", "color": "#f4b942"}
+  ],
+  "metadata": [
+    {"name": "Project", "value": "Splunk SIEM Investigation Lab"},
+    {"name": "Dataset", "value": "BOTS v3 (Boss of the SOC v3)"},
+    {"name": "Author", "value": "Atharva Acharya"},
+    {"name": "GitHub", "value": "github.com/atharva-acharya/Splunk-SOC-Lab"}
+  ],
+  "links": [],
+  "showTacticRowBackground": true,
+  "tacticRowBackground": "#1a1a2e",
+  "selectTechniquesAcrossTactics": true,
+  "selectSubtechniquesWithParent": false,
+  "selectVisibleTechniques": false
+}
