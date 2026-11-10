@@ -1,11 +1,26 @@
 # Splunk SIEM Investigation Lab
 
+## In 30 seconds
+
+**Question:** Using the public BOTS v3 dataset in Splunk, can one analyst trace a web attack campaign from the first scan to stolen cloud credentials?
+
+**Finding:** 5 SPL rules flagged each stage: a scanner making 2,207 requests across 1,023 paths, an Apache Struts RCE (CVE-2017-9805) that led to a UID 0 backdoor account and a reverse shell, 21 unique suspicious froth.ly subdomains from one host, and 32 successful IAM credential pulls from the AWS metadata service. Findings map to 10 MITRE ATT&CK techniques across 7 tactics.
+
+**Recommendation:** Patch public-facing apps (the Struts fix had been out for over 11 months), enforce IMDSv2 and rotate the EC2 role credentials. Add WAF rate limiting, per-host DNS baselines, and process command-line logging so LOLBin alerts can be tied to real commands.
+
+**Skills shown:** Splunk Enterprise, SPL, HTTP, DNS, Windows and AWS log analysis, attack chain reconstruction, MITRE ATT&CK, incident reporting.
+
+**Start here:** [IR-002 Apache Struts RCE](ir-reports/IR-002-Apache-Struts-RCE.md), the full chain from exploit to reverse shell, rebuilt command by command.
+
+---
+
 A hands-on SOC analyst portfolio project demonstrating threat detection, investigation, and incident response using Splunk Enterprise and the BOTS v3 (Boss of the SOC) dataset. Five SPL detection rules covering a real-world web attack chain — from initial reconnaissance through exploitation, privilege escalation, exfiltration, and cloud credential theft — each backed by an investigation-led IR report mapped to MITRE ATT&CK.
 
 ---
 
 ## Contents
 
+- [In 30 seconds](#in-30-seconds)
 - [Lab Overview](#lab-overview)
 - [Environment](#environment)
 - [Dataset](#dataset)
@@ -71,7 +86,7 @@ Five SPL analytics rules covering distinct attack techniques across web, endpoin
 | 02 | [Apache Struts RCE](detection-rules/SPL-Rule-02-Struts-RCE.md) | Exploit Public-Facing Application | T1190 | stream:http | Critical |
 | 03 | [DNS Exfiltration](detection-rules/SPL-Rule-03-DNS-Exfiltration.md) | Exfiltration Over DNS | T1048.003 | stream:dns | High |
 | 04 | [Suspicious LOLBin Execution](detection-rules/SPL-Rule-04-Suspicious-Process.md) | Windows Command Shell | T1059.003 | wineventlog:security | Medium |
-| 05 | [AWS IMDS Credential Theft](detection-rules/SPL-Rule-05-AWS-IMDS-Abuse.md) | Cloud Instance Metadata API | T1552.005 | stream:http | Critical |
+| 05 | [AWS IMDS Credential Theft](detection-rules/SPL-Rule-05-AWS-Metadata-Abuse.md) | Cloud Instance Metadata API | T1552.005 | stream:http | Critical |
 
 ### Rule Highlights
 
@@ -111,7 +126,7 @@ Full command extraction, timeline reconstruction, and IOC documentation in [IR-0
 
 ## MITRE ATT&CK Coverage
 
-![MITRE ATT&CK Navigator Layer](screenshots/mitre-navigator-layer.png)
+![MITRE ATT&CK Navigator Layer](screenshots/Splunk-SOC-Lab-MITRE-Layer.png)
 
 **Navigator layer:** [Splunk-SOC-Lab-MITRE-Layer.json](mitre-navigator/Splunk-SOC-Lab-MITRE-Layer.json)  
 Load via [ATT&CK Navigator](https://mitre-attack.github.io/attack-navigator/) → Open Existing Layer → Upload from local.
@@ -168,7 +183,7 @@ Splunk-SOC-Lab/
 │   ├── SPL-Rule-02-Struts-RCE.md
 │   ├── SPL-Rule-03-DNS-Exfiltration.md
 │   ├── SPL-Rule-04-Suspicious-Process.md
-│   └── SPL-Rule-05-AWS-IMDS-Abuse.md
+│   └── SPL-Rule-05-AWS-Metadata-Abuse.md
 ├── ir-reports/
 │   ├── IR-001-Web-Reconnaissance.md
 │   ├── IR-002-Apache-Struts-RCE.md
@@ -183,7 +198,7 @@ Splunk-SOC-Lab/
     ├── splunk-install-verified.png
     ├── botsv3-ingestion-verified.png
     ├── spl-detection-rules-verified.png
-    └── mitre-navigator-layer.png
+    └── Splunk-SOC-Lab-MITRE-Layer.png
 ```
 
 ---
@@ -194,11 +209,12 @@ This lab is part of a portfolio of hands-on SOC analyst projects:
 
 | Project | Focus | Link |
 |---------|-------|------|
-| AD SOC Detection Lab | Active Directory attacks, KQL, Microsoft Sentinel, 7 IR reports | [github.com/atharva-acharya/AD-SOC-Detection-Lab](https://github.com/atharva-acharya/AD-SOC-Detection-Lab) |
-| Microsoft Sentinel Detection Lab | Azure SIEM, KQL analytics rules, Sysmon, 5 IR reports | [github.com/atharva-acharya/Sentinel-Detection-Lab](https://github.com/atharva-acharya/Sentinel-Detection-Lab) |
+| AD SOC Detection Lab | Active Directory attacks, KQL, Elastic SIEM, 7 IR reports | [github.com/atharva-acharya/AD-SOC-Detection-Lab](https://github.com/atharva-acharya/AD-SOC-Detection-Lab) |
+| Microsoft Sentinel Detection Lab | Azure SIEM, KQL analytics rules, Windows Security Events via AMA, 5 IR reports | [github.com/atharva-acharya/Sentinel-Detection-Lab](https://github.com/atharva-acharya/Sentinel-Detection-Lab) |
 | Splunk SIEM Investigation Lab | Splunk SPL, BOTS v3, web attack chain, cloud threats | This repository |
 
 ---
 
 *MSc Cyber Security Engineering — University of Warwick (Merit)*  
-*CDSA — HackTheBox (June 2026)*
+*CDSA — HackTheBox (June 2026)*  
+*Microsoft SC-200, Security Operations Analyst Associate (2026)*
