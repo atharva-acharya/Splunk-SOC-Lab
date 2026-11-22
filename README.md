@@ -4,7 +4,7 @@
 
 **Question:** Using the public BOTS v3 dataset in Splunk, can one analyst trace a web attack campaign from the first scan to stolen cloud credentials?
 
-**Finding:** 5 SPL rules flagged each stage: a scanner making 2,207 requests across 1,023 paths, an Apache Struts RCE (CVE-2017-9805) that led to a UID 0 backdoor account and a reverse shell, 21 unique suspicious froth.ly subdomains from one host, and 32 successful IAM credential pulls from the AWS metadata service. Findings map to 10 MITRE ATT&CK techniques across 7 tactics.
+**Finding:** 5 SPL rules flagged each stage: a scanner making 2,207 requests across 1,023 paths, an Apache Struts RCE (CVE-2017-9805) that led to a UID 0 backdoor account and a reverse shell, 21 unique suspicious froth.ly subdomains from one host, and 32 successful IAM credential pulls from the AWS metadata service. Findings map to 10 MITRE ATT&CK techniques across 8 tactics.
 
 **Recommendation:** Patch public-facing apps (the Struts fix had been out for over 11 months), enforce IMDSv2 and rotate the EC2 role credentials. Add WAF rate limiting, per-host DNS baselines, and process command-line logging so LOLBin alerts can be tied to real commands.
 
@@ -14,7 +14,7 @@
 
 ---
 
-A hands-on SOC analyst portfolio project demonstrating threat detection, investigation, and incident response using Splunk Enterprise and the BOTS v3 (Boss of the SOC) dataset. Five SPL detection rules covering a real-world web attack chain — from initial reconnaissance through exploitation, privilege escalation, exfiltration, and cloud credential theft — each backed by an investigation-led IR report mapped to MITRE ATT&CK.
+A hands-on SOC analyst portfolio project demonstrating threat detection, investigation, and incident response using Splunk Enterprise and the BOTS v3 (Boss of the SOC) dataset. Five SPL detection rules covering a real-world web attack chain, from initial reconnaissance through exploitation, privilege escalation, exfiltration, and cloud credential theft, each backed by an investigation-led IR report mapped to MITRE ATT&CK.
 
 ---
 
@@ -41,7 +41,7 @@ A hands-on SOC analyst portfolio project demonstrating threat detection, investi
 | **Dataset** | BOTS v3 (Boss of the SOC v3) |
 | **Detection Rules** | 5 SPL analytics rules |
 | **IR Reports** | 5 investigation-led reports |
-| **MITRE Techniques** | 10 techniques across 7 tactics |
+| **MITRE Techniques** | 10 techniques across 8 tactics |
 | **Attack Surface** | Web application, Windows endpoints, AWS cloud |
 
 ---
@@ -90,17 +90,17 @@ Five SPL analytics rules covering distinct attack techniques across web, endpoin
 
 ### Rule Highlights
 
-**Rule 02 — Apache Struts RCE (CVE-2017-9805)**  
-Detects OGNL expression injection in HTTP POST bodies targeting Apache Struts REST plugin endpoints. Fires on presence of `OgnlContext`, `ProcessBuilder`, or `Runtime.exec` patterns in `form_data` — none of which appear in legitimate application traffic. This rule detected a complete attack chain including backdoor account creation and reverse shell establishment.
+**Rule 02: Apache Struts RCE (CVE-2017-9805)**  
+Detects OGNL expression injection in HTTP POST bodies targeting Apache Struts REST plugin endpoints. Fires on presence of `OgnlContext`, `ProcessBuilder`, or `Runtime.exec` patterns in `form_data`, none of which appear in legitimate application traffic. This rule detected a complete attack chain including backdoor account creation and reverse shell establishment.
 
-**Rule 05 — AWS IMDS Credential Theft**  
-Detects successful queries to the AWS Instance Metadata Service at `169.254.169.254` targeting IAM security credential endpoints. Filters on HTTP 200 responses only — eliminates probing attempts and focuses on confirmed credential retrieval. This technique was used in the 2019 Capital One breach.
+**Rule 05: AWS IMDS Credential Theft**  
+Detects successful queries to the AWS Instance Metadata Service at `169.254.169.254` targeting IAM security credential endpoints. Filters on HTTP 200 responses only, which eliminates probing attempts and focuses on confirmed credential retrieval. This technique was used in the 2019 Capital One breach.
 
 ---
 
 ## Incident Reports
 
-All five reports are investigation-led: each documents the SPL queries used during the investigation, the evidence returned, and how findings drove the next investigative step. Reports are not alert summaries — they reconstruct the analyst's decision-making process.
+All five reports are investigation-led: each documents the SPL queries used during the investigation, the evidence returned, and how findings drove the next investigative step. Reports are not alert summaries; they reconstruct the analyst's decision-making process.
 
 | Report | Title | Severity | MITRE |
 |--------|-------|----------|-------|
@@ -110,7 +110,7 @@ All five reports are investigation-led: each documents the SPL queries used duri
 | [IR-004](ir-reports/IR-004-LOLBin-Execution.md) | LOLBin Execution: WMIC and reg.exe Abuse | Medium | T1059.003 |
 | [IR-005](ir-reports/IR-005-AWS-IMDS-Credential-Theft.md) | AWS Instance Metadata Service Credential Theft | Critical | T1552.005 |
 
-### IR-002 — Attack Chain Summary
+### IR-002: Attack Chain Summary
 
 IR-002 documents the most complete attack sequence in the lab. The attacker at `192.168.8.103` exploited CVE-2017-9805 against an unpatched Apache Struts instance at `192.168.9.30`, then executed the following post-exploitation sequence entirely via injected OS commands:
 
@@ -193,7 +193,7 @@ Splunk-SOC-Lab/
 ├── mitre-navigator/
 │   └── Splunk-SOC-Lab-MITRE-Layer.json
 ├── datasets/
-│   └── botsv3_data_set.tgz (not tracked — too large for GitHub)
+│   └── botsv3_data_set.tgz (not tracked, too large for GitHub)
 └── screenshots/
     ├── splunk-install-verified.png
     ├── botsv3-ingestion-verified.png
@@ -215,6 +215,6 @@ This lab is part of a portfolio of hands-on SOC analyst projects:
 
 ---
 
-*MSc Cyber Security Engineering — University of Warwick (Merit)*  
-*CDSA — HackTheBox (June 2026)*  
+*MSc Cyber Security Engineering, University of Warwick (Merit)*  
+*CDSA, HackTheBox (June 2026)*  
 *Microsoft SC-200, Security Operations Analyst Associate (2026)*
